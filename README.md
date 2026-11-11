@@ -1,0 +1,1 @@
+# szenzorhalozat_szimulacio
