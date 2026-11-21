@@ -1,5 +1,4 @@
 <Solution>
-  <Project Path="Sensor\Sensor.csproj" />
   <Project Path="szenzorhalozat_szimulacio/szenzorhalozat_szimulacio.csproj" />
   <Project Path="Tools\Tools.csproj" />
 </Solution>

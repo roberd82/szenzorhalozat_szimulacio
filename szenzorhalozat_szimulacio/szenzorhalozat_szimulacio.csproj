@@ -8,7 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Sensor\Sensor.csproj" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.15" />
+      <PackageReference Include="MySql.EntityFrameworkCore" Version="10.0.12" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Tools\Tools.csproj" />
     </ItemGroup>
 
 </Project>
