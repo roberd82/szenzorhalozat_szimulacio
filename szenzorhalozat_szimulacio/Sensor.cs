@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace szenzorhalozat_szimulacio;
@@ -19,6 +20,7 @@ public class SensorDdContext : DbContext {
 
 public class Sensor {
 	// a lehetséges szenzortípusok listája a méréshatárukkal
+	// "név": (min, max)
 	public static Dictionary<string, (int, int)> MeasurementRanges { get; set; } = [];
 	
 	// a szenzor azonosítója
@@ -39,7 +41,16 @@ public class Sensor {
 	
 	// a szenzorról egy adott pillanatban leolvasható adat
 	[NotMapped]
-	public int Data { get; set; }
+	public int Data {
+		get;
+		// ReSharper disable once PropertyCanBeMadeInitOnly.Global
+		set {
+			if (value < MeasurementRanges[Type].Item1 || value > MeasurementRanges[Type].Item2) {
+				// eseménykezelés méréshatáron túli érték esetén
+			}
+			field = value;
+		}
+	}
 }
 
 public class Measurement {
@@ -48,8 +59,11 @@ public class Measurement {
 	[Key] [Column("id")] [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public required int Id { get; init; }
 	
-	[Column("sensor_id")] [ForeignKey("Sensor")]
+	[ForeignKey("Sensor")] [JsonIgnore] //[Column("sensor_id")] 
 	public required Sensor SensorId { get; init; }
+
+	[NotMapped] [JsonPropertyName("SensorId")]
+	public int SensorKey => SensorId.Id;
 	
 	[Column("time")]
 	public required DateTime Time { get; init; }
